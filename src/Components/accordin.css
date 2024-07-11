@@ -1,0 +1,12 @@
+.accordion-panel {
+  transition: max-height 1s ease-in-out, padding 1s ease-in-out;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.chakra-accordion__item[aria-expanded="true"] .accordion-panel {
+  max-height: 200px;
+  /* Adjust this value based on the content */
+  padding: 16px;
+  /* Adjust this value based on your design */
+}

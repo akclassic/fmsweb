@@ -5,6 +5,7 @@ import Login from './Pages/Login/login';
 import Payment from './Pages/Payment/payment';
 import ProtectedRoute from './Components/ProtectedRoute';
 import './App.css';
+import Profile from './Pages/Profile/profile';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             {/* <Route path="/contact" element={<Contact />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute requiredRole="admin" />}>

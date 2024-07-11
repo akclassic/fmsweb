@@ -20,6 +20,7 @@ import {
   VStack 
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import LanguageSelector from './LanguageSelector';
 
 const Navbar: React.FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -36,6 +37,7 @@ const Navbar: React.FC = () => {
             <Link href="/">Home</Link>
             <Link href="/about">About</Link>
             <Link href="/login">Login</Link>
+            <LanguageSelector />
           </Stack>
         </Flex>
         <IconButton
@@ -69,6 +71,7 @@ const Navbar: React.FC = () => {
               <Link href="/about" onClick={onClose}>About</Link>
               <Link href="/contact" onClick={onClose}>Contact</Link>
               <Link href="/login" onClick={onClose}>Login</Link>
+              <LanguageSelector />
             </VStack>
           </DrawerBody>
         </DrawerContent>
