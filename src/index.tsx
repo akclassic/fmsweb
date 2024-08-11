@@ -8,11 +8,11 @@ import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <I18nextProvider i18n={i18n}>
       <ChakraProvider>
         <App />
       </ChakraProvider>
     </I18nextProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

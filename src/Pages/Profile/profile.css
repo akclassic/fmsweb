@@ -1,13 +1,24 @@
 .page-container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .transaction-card {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-  
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.transaction-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.suppname {
+  cursor: pointer;
+}
+
+.debit {
+  color: rgb(218, 8, 208);
+}
+
+.credit {
+  color: green;
+}

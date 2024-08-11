@@ -1,42 +1,47 @@
+import { useState } from 'react';
 import { Box, Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
-import TransactionCard from '../../Components/TransactionCard';
-import './profile.css';
-import Customers from './customers';
 import { useTranslation } from 'react-i18next';
+// import TransactionCard from '../../Components/TransactionCard';
+import Customers from './customers';
+import Payments from './purchases';
+import './profile.css';
+import Suppliers from './suppliers';
+import Materials from './materials';
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
-  
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabsChange = (index: number) => {
+    setActiveTab(index);
+  };
+
   return (
     <Box className="page-container" p={8}>
       <Heading as="h1" size="xl">Hi, Prashant Mishra</Heading>
       <Text fontSize="lg" my={4}>Total P & L: 50000</Text>
-      <Tabs size="md" variant="enclosed">
+      <Tabs size="md" variant="enclosed" onChange={handleTabsChange}>
         <TabList>
           <Tab>{t('customers')}</Tab>
-          <Tab>Suppliers</Tab>
-          <Tab>Payments</Tab>
           <Tab>Purchases</Tab>
+          <Tab>Suppliers</Tab>
+          <Tab>Materials</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Customers />
-          </TabPanel>
-          {/* <TabPanel>
-            <Suppliers />
+            {activeTab === 0 && <Customers />}
           </TabPanel>
           <TabPanel>
-            <Payments />
+            {activeTab === 1 && <Payments />}
           </TabPanel>
           <TabPanel>
-            <Purchases />
-          </TabPanel> */}
+            {activeTab === 2 && <Suppliers />}
+          </TabPanel>
+          <TabPanel>
+            {activeTab === 3 && <Materials />}
+          </TabPanel>
         </TabPanels>
       </Tabs>
-      {/* <Heading as="h2" size="lg" my={4}>Transactions</Heading>
-      <TransactionCard customer="ABC" transactionAmount={4500} amountToBePaid={2000} amountPaid={2500} />
-      <TransactionCard customer="ABC" transactionAmount={4500} amountToBePaid={2000} amountPaid={2500} />
-      <TransactionCard customer="ABC" transactionAmount={4500} amountToBePaid={2000} amountPaid={2500} /> */}
     </Box>
   );
 };
