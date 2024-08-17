@@ -7,6 +7,7 @@ import { CustomerInfo } from '../../Services/Models/CustomerInfo';
 import { DeleteIcon } from '@chakra-ui/icons';
 import useToastMessage from '../../Contexts/UseToastMessage';
 import moment from 'moment';
+import CommonModal from '../../Components/Modal/Modal';
 
 const Customers: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,6 +98,15 @@ const Customers: React.FC = () => {
           </Table>
         </TableContainer>
       )}
+      {/* <CommonModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Add Customer Details"
+        onSave={() => handleSave(data)}
+        isSubmitting={isSubmitting}
+      >
+        <AddEditCustomer onSave={handleSaveCustomer} />
+      </CommonModal> */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}

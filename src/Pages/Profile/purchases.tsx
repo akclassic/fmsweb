@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { PurchaseOrderinfo } from "../../Services/Models/PurchaseInfor";
 import useCompanyService from "../../Services/Concretes/CompanyService";
-import { Box, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Flex, Tfoot, Text, IconButton } from "@chakra-ui/react";
+import { Box, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Flex, Tfoot, Text, IconButton, useDisclosure } from "@chakra-ui/react";
 import moment from "moment";
 import { AttachmentIcon } from "@chakra-ui/icons";
+import CommonModal from "../../Components/Modal/Modal";
+import PurchaseForm from "../../Components/Forms/Purchase";
 
 const Purchases: React.FC = () => {
 
     const { getPurchaseOrders } = useCompanyService();
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderinfo[]>([]);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const loadPurchaseOrders = async () => {
@@ -44,10 +48,21 @@ const Purchases: React.FC = () => {
         }
     };
 
+    const handleSave = async (data: any) => {
+        setIsSubmitting(true);
+        // Perform API call here
+        console.log(data);
+        // After saving data, close the modal
+        onClose();
+        setIsSubmitting(false);
+        // Optionally, refresh the page or update the state to reflect changes
+        window.location.reload();
+    };
+
     return (
         <Box>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
-                <Button colorScheme="blue">Create Purchase Order</Button>
+                <Button colorScheme="blue" onClick={onOpen}>Create Purchase Order</Button>
             </Flex>
             <TableContainer>
                 <Table variant='striped' colorScheme='teal'>
@@ -114,6 +129,15 @@ const Purchases: React.FC = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
+            <CommonModal
+                isOpen={isOpen}
+                onClose={onClose}
+                title="Purchase Details"
+                onSave={(data: any) => handleSave(data)}
+                isSubmitting={isSubmitting}
+            >
+                <PurchaseForm onSubmit={handleSave}></PurchaseForm>
+            </CommonModal>
         </Box>
     )
 }

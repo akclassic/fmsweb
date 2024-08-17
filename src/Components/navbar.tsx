@@ -1,24 +1,25 @@
 // src/components/Navbar.tsx
 
 import React from 'react';
-import { 
-  Box, 
-  Flex, 
-  Link, 
-  Button, 
-  useColorMode, 
-  useColorModeValue, 
-  Stack, 
-  IconButton, 
-  Drawer, 
-  DrawerBody, 
-  DrawerHeader, 
-  DrawerOverlay, 
-  DrawerContent, 
-  DrawerCloseButton, 
-  useDisclosure, 
-  VStack 
+import {
+  Box,
+  Flex,
+  Link,
+  Button,
+  useColorMode,
+  useColorModeValue,
+  Stack,
+  IconButton,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  VStack
 } from '@chakra-ui/react';
+import { VscAccount } from "react-icons/vsc";
 import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import LanguageSelector from './LanguageSelector';
 
@@ -37,22 +38,29 @@ const Navbar: React.FC = () => {
             <Link href="/">Home</Link>
             <Link href="/about">About</Link>
             <Link href="/login">Login</Link>
-            <LanguageSelector />
-          </Stack>
-        </Flex>
-        <IconButton
-          size="md"
-          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-          aria-label="Open Menu"
-          display={{ md: 'none' }}
-          onClick={isOpen ? onClose : onOpen}
-        />
-        <Flex alignItems={'center'}>
-          <Stack direction={'row'} spacing={7}>
+            <Link href="/profile">Profile</Link>
+            {/* <LanguageSelector /> */}
+            {/* <IconButton
+              size="md"
+              icon={<VscAccount />}
+              aria-label="Profile"
+              mr={2}
+              ml={2}
+            /> */}
             <Button onClick={toggleColorMode}>
               {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>
           </Stack>
+          <IconButton
+            size="md"
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label="Open Menu"
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+            mr={4}
+          />
+          {/* <Stack direction={'row'} spacing={7}>
+          </Stack> */}
         </Flex>
       </Flex>
 

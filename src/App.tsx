@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/navbar';
 import { Box } from '@chakra-ui/react';
 import Login from './Pages/Login/login';
-import Payment from './Pages/Payment/payment';
+import Payment from './Components/Forms/payment';
 import ProtectedRoute from './Components/ProtectedRoute';
 import './App.css';
 import Profile from './Pages/Profile/profile';
@@ -22,9 +22,9 @@ function App() {
             <Route path="/profile" element={<Profile />} />
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoute requiredRole="admin" />}>
+            {/* <Route element={<ProtectedRoute requiredRole="admin" />}>
               <Route path="/payment" element={<Payment />} />
-            </Route>
+            </Route> */}
           </Routes>
         </Box>
       </Router>
