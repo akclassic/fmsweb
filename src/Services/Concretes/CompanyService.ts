@@ -2,7 +2,7 @@ import axios from "axios";
 import { useCallback } from 'react';
 import { ICompanyService } from "../Contracts/ICompanyService";
 import { CompanyInfo } from '../Models/CompanyInfo';
-import { PurchaseOrderinfo } from "../Models/PurchaseInfor";
+import { PurchaseOrderinfo, SalesOrderinfo } from "../Models/PurchaseInfor";
 import { getBaseAPIUrl } from "../../Utils/func";
 
 const useCompanyService = (): ICompanyService => {
@@ -27,7 +27,16 @@ const useCompanyService = (): ICompanyService => {
         }
     }, [baseUrl]);
 
-    return { getCompanyList, getPurchaseOrders };
+    const getSalesOrders = useCallback(async (companyId: number): Promise<SalesOrderinfo[]> => {
+        try {
+            const response = await axios.get(`${baseUrl}/sales/${companyId}`);
+            return response.data;
+        } catch (error) {
+            throw new Error('Error fetching data');
+        }
+    }, [baseUrl]);
+
+    return { getCompanyList, getPurchaseOrders, getSalesOrders };
 };
 
 export default useCompanyService;

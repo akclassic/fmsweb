@@ -160,6 +160,7 @@ import useSupplierService from '../Services/Concretes/SupplierService';
 import { SupplierDetail } from '../Services/Models/SupplierDetailInfo';
 import { SupplierPurchaseInfo } from '../Services/Models/SupplierPurchaseInfo';
 import moment from 'moment';
+import { handleDownload } from '../Utils/func';
 
 interface SupplierDetailsProps {
     isOpen: boolean;
@@ -202,21 +203,6 @@ const SupplierDetails = ({ isOpen, onClose, supplierId }: SupplierDetailsProps) 
             loadSupplierTransactions();
         }
     }, [supplierId, getSupplierInfo, getSupplierTransactionsInfo]);
-
-    const handleDownload = async (url: string) => {
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.setAttribute('download', 'invoice.jpg'); // You can dynamically generate this name if needed
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error('Error downloading the file', error);
-        }
-    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">

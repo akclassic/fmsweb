@@ -10,14 +10,16 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
+import { MODAL_SIZES } from '../../Utils/contants';
 
 interface CommonModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
-  onSave: (data: any) => void;
-  isSubmitting: boolean;
+  onSave?: (data: any) => void;
+  isSubmitting?: boolean;
+  form?: string;
 }
 
 const CommonModal: React.FC<CommonModalProps> = ({
@@ -27,9 +29,10 @@ const CommonModal: React.FC<CommonModalProps> = ({
   children,
   onSave,
   isSubmitting,
+  form
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size={{ base: 'xs', md: 'md', lg: 'lg' }}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size={MODAL_SIZES}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
@@ -38,9 +41,9 @@ const CommonModal: React.FC<CommonModalProps> = ({
           {children}
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onSave} isLoading={isSubmitting}>
+          {form && <Button colorScheme="blue" mr={3} onClick={onSave} isLoading={isSubmitting} type='submit' form={form}>
             Save
-          </Button>
+          </Button>}
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>

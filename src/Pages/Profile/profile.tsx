@@ -7,6 +7,7 @@ import Payments from './purchases';
 import './profile.css';
 import Suppliers from './suppliers';
 import Materials from './materials';
+import Sales from './sales';
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
@@ -23,8 +24,9 @@ const Profile: React.FC = () => {
       <Tabs size="md" variant="enclosed" onChange={handleTabsChange}>
         <TabList>
           <Tab>{t('customers')}</Tab>
-          <Tab>Purchases</Tab>
           <Tab>Suppliers</Tab>
+          <Tab>Purchases</Tab>
+          <Tab>Sales</Tab>
           <Tab>Materials</Tab>
         </TabList>
         <TabPanels>
@@ -32,10 +34,13 @@ const Profile: React.FC = () => {
             {activeTab === 0 && <Customers />}
           </TabPanel>
           <TabPanel>
-            {activeTab === 1 && <Payments />}
+            {activeTab === 1 && <Suppliers />}
           </TabPanel>
           <TabPanel>
-            {activeTab === 2 && <Suppliers />}
+            {activeTab === 2 && <Payments />}
+          </TabPanel>
+          <TabPanel>
+            {activeTab === 3 && <Sales />}
           </TabPanel>
           <TabPanel>
             {activeTab === 3 && <Materials />}

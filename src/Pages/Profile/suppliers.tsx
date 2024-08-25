@@ -77,10 +77,10 @@ const Suppliers: React.FC = () => {
                         <Tbody>
                             {suppliers.map((supplier) => (
                                 <Tr key={supplier.userId}>
-                                    <Td key={supplier.userId} textAlign="left">
+                                    <Td textAlign="left">
                                         <Box as='span' className="suppname" onClick={() => handleSupplierClick(supplier.supplierId ? supplier.supplierId : "")}>{supplier.name}</Box>
                                     </Td>
-                                    <Td key={supplier.userId} textAlign="left">
+                                    <Td textAlign="left">
                                         <Box as='span' className={supplier.creditDebitBalance > 0 ? 'debit' : 'credit'}>{supplier.creditDebitBalance}</Box>
                                     </Td>
                                     <Td>

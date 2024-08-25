@@ -1,54 +1,41 @@
-import { useEffect, useState } from "react";
-import { PurchaseOrderinfo } from "../../Services/Models/PurchaseInfor";
+import { Box, Button, Flex, IconButton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure, Text, Tfoot } from "@chakra-ui/react"
 import useCompanyService from "../../Services/Concretes/CompanyService";
-import { Box, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Flex, Tfoot, Text, IconButton, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { SalesOrderinfo } from "../../Services/Models/PurchaseInfor";
 import moment from "moment";
 import { AttachmentIcon } from "@chakra-ui/icons";
-import CommonModal from "../../Components/Modal/Modal";
-import PurchaseForm from "../../Components/Forms/Purchase";
 import { handleDownload } from "../../Utils/func";
+import CommonModal from "../../Components/Modal/Modal";
 
-const Purchases: React.FC = () => {
-
-    const { getPurchaseOrders } = useCompanyService();
-    const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderinfo[]>([]);
+const Sales: React.FC = () => {
+    const { getSalesOrders } = useCompanyService();
+    const [salesOrders, setSalesOrders] = useState<SalesOrderinfo[]>([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        const loadPurchaseOrders = async () => {
-            try {
-                const result = await getPurchaseOrders(1);
-                setPurchaseOrders(result);
-            } catch (error) {
-                //setError(error.message);
-            } finally {
-                // setLoading(false);
-            }
-        }
-
-        loadPurchaseOrders();
+        loadSalesOrders();
     }, []);
 
-    const totalAmount = purchaseOrders.reduce((acc, purchase) => acc + purchase.totalAmount, 0);
-    const totalOutstanding = purchaseOrders.reduce((acc, purchase) => acc + purchase.outstandingBalance, 0);
-    const totalQuantity = purchaseOrders.reduce((acc, purchase) => acc + purchase.quantity, 0);
+    const loadSalesOrders = async () => {
+        try {
+            const result = await getSalesOrders(1);
+            setSalesOrders(result);
+        } catch (error) {
+            //setError(error.message);
+        } finally {
+            // setLoading(false);
+        }
+    }
 
-    const handleSave = async (data: any) => {
-        setIsSubmitting(true);
-        // Perform API call here
-        console.log(data);
-        // After saving data, close the modal
-        onClose();
-        setIsSubmitting(false);
-        // Optionally, refresh the page or update the state to reflect changes
-        window.location.reload();
-    };
-
+    const totalAmount = salesOrders.reduce((acc, purchase) => acc + purchase.totalAmount, 0);
+    const totalOutstanding = salesOrders.reduce((acc, purchase) => acc + purchase.outstandingBalance, 0);
+    const totalQuantity = salesOrders.reduce((acc, purchase) => acc + purchase.quantity, 0);
+    
     return (
         <Box>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
-                <Button colorScheme="blue" onClick={onOpen}>Create Purchase Order</Button>
+                <Button colorScheme="blue" onClick={onOpen}>Create Sale Order</Button>
             </Flex>
             <TableContainer>
                 <Table variant='striped' colorScheme='teal'>
@@ -57,7 +44,7 @@ const Purchases: React.FC = () => {
                         <Tr>
                             <Th>Date Of Purchase</Th>
                             <Th>Material</Th>
-                            <Th>Supplier Name</Th>
+                            <Th>Customer Name</Th>
                             <Th>Quantity</Th>
                             <Th>Purchase Amount</Th>
                             <Th>Outstanding Amount</Th>
@@ -65,32 +52,32 @@ const Purchases: React.FC = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {purchaseOrders.length ?
-                            purchaseOrders.map(purchaseOrder => (
-                                <Tr key={purchaseOrder.id}>
+                        {salesOrders.length ?
+                            salesOrders.map(salesOrder => (
+                                <Tr key={salesOrder.id}>
                                     <Td textAlign="left">
-                                        {moment(purchaseOrder.dateOfPurchase).format('DD MMMM YYYY, h:mm A')}
+                                        {moment(salesOrder.dateOfPurchase).format('DD MMMM YYYY, h:mm A')}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.productName}
+                                        {salesOrder.productName}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.supplierName}
+                                        {salesOrder.customerName}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.quantity}
+                                        {salesOrder.quantity}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.totalAmount}
+                                        {salesOrder.totalAmount}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.outstandingBalance}
+                                        {salesOrder.outstandingBalance}
                                     </Td>
                                     <Td textAlign="left">
-                                        {purchaseOrder.invoiceUrl ?
+                                        {salesOrder.invoiceUrl ?
                                             <IconButton
                                                 icon={<AttachmentIcon />}
-                                                onClick={() => handleDownload(purchaseOrder.invoiceUrl)}
+                                                onClick={() => handleDownload(salesOrder.invoiceUrl)}
                                                 aria-label="Download Invoice"
                                             />
                                             :
@@ -115,18 +102,17 @@ const Purchases: React.FC = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <CommonModal
+            {/* <CommonModal
                 isOpen={isOpen}
                 onClose={onClose}
-                title="Purchase Details"
+                title="Sales Details"
                 onSave={(data: any) => handleSave(data)}
                 isSubmitting={isSubmitting}
             >
                 <PurchaseForm onSubmit={handleSave}></PurchaseForm>
-            </CommonModal>
+            </CommonModal> */}
         </Box>
     )
 }
 
-export default Purchases;
-
+export default Sales;

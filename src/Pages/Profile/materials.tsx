@@ -1,15 +1,22 @@
-import { Box, Center, Spinner, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
+import { Box, Button, Center, Flex, Spinner, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
-import { CompanyProductInfo } from "../../Services/Models/CompanyProductInfo";
+import { CompanyProductInfo, ProductDTO } from "../../Services/Models/CompanyProductInfo";
 import useProductService from "../../Services/Concretes/ProductService";
 import { DeleteIcon } from "@chakra-ui/icons";
+import CommonModal from "../../Components/Modal/Modal";
+import AddEditMaterial from "../../Components/Forms/AddEditMaterial";
+import useToastMessage from "../../Contexts/UseToastMessage";
+import { cloneDeep } from "lodash";
 
 const Materials: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<CompanyProductInfo[]>([]);
-    const { getCompanyProducts } = useProductService();
-    
+    const { getCompanyProducts, addProduct, removeProduct } = useProductService();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const showToast = useToastMessage();
+
     useEffect(() => {
         setLoading(true);
         loadProducts();
@@ -28,8 +35,55 @@ const Materials: React.FC = () => {
         }
     }
 
+    const handleSave = async (data: any) => {
+        setIsSubmitting(true);
+        const productDTO: ProductDTO = {
+            name: cloneDeep(data.name),
+            companyId: 1,
+            productUnitId: cloneDeep(Number(data.unit))
+        };
+
+        const result = await addProduct(cloneDeep(productDTO));
+
+        try
+        {
+            if (result)  {
+                showToast('Material Add Successfully', 'success');
+                await loadProducts();
+                onClose();
+            } else {
+                showToast('Failed', 'error');
+                onClose();
+            }
+        }
+        catch (error) {
+            showToast('Failed', 'error');
+            onClose();
+        }
+        finally {
+            setIsSubmitting(false);
+        }
+        
+
+
+    };
+
+    const handleDelete = async (id: number) => {
+        const result = await removeProduct(id);
+
+        if (result)  {
+            showToast('Material Removed Successfully', 'success');
+            await loadProducts();
+        } else {
+            showToast('Failed', 'error');
+        }
+    }
+
     return (
         <Box>
+            <Flex justifyContent="flex-end" alignItems="center" mb={4}>
+                <Button colorScheme="blue" onClick={onOpen}>Add Material</Button>
+            </Flex>
             {loading ? (
                 <Center height="100vh">
                     <Spinner size="xl" />
@@ -51,23 +105,23 @@ const Materials: React.FC = () => {
                         <Tbody>
                             {products.map((product) => (
                                 <Tr key={product.id}>
-                                    <Td key={product.id} textAlign="left">
+                                    <Td textAlign="left">
                                         {product.id}
                                     </Td>
-                                    <Td key={product.id} textAlign="left">
+                                    <Td textAlign="left">
                                         {product.name}
                                     </Td>
-                                    <Td key={product.id} textAlign="left">
+                                    <Td textAlign="left">
                                         {product.category}
                                     </Td>
-                                    <Td key={product.id} textAlign="left">
+                                    <Td textAlign="left">
                                         {product.productUnitName}
                                     </Td>
-                                    <Td key={product.id} textAlign="left">
+                                    <Td textAlign="left">
                                         {product.productUnitPrice}
                                     </Td>
                                     <Td>
-                                        <DeleteIcon  />
+                                        <DeleteIcon onClick={() => handleDelete(product.id)} />
                                     </Td>
                                 </Tr>
                             ))}
@@ -75,6 +129,16 @@ const Materials: React.FC = () => {
                     </Table>
                 </TableContainer>
             )}
+            <CommonModal
+                isOpen={isOpen}
+                onClose={onClose}
+                title="Add Material"
+                onSave={(data: any) => handleSave(data)}
+                isSubmitting={isSubmitting}
+                form="add-edit-material-form"
+            >
+                <AddEditMaterial onSubmit={handleSave} />
+            </CommonModal>
         </Box>
     )
 }
