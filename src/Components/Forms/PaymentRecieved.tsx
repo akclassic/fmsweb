@@ -57,8 +57,8 @@ const PaymentsReceivedForm: React.FC<FormikProps<PaymentsReceivedFormValues>> = 
         // AWS S3 upload logic
         console.log(process.env.REACT_APP_AWS_ACCESS_KEY)
         const s3 = new S3({
-            accessKeyId: 'AKIA3LET5S64SKWU5HAU',//process.env.REACT_APP_AWS_ACCESS_KEY,
-            secretAccessKey: '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',// process.env.REACT_APP_AWS_SECRET_KEY,
+            accessKeyId: '',//
+            secretAccessKey: 'ss',
             region: 'Stokholm'
         });
 
