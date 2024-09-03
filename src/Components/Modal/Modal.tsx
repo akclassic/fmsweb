@@ -11,6 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { MODAL_SIZES } from '../../Utils/contants';
+import './Modal.css';
 
 interface CommonModalProps {
   isOpen: boolean;
@@ -34,14 +35,14 @@ const CommonModal: React.FC<CommonModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered size={MODAL_SIZES}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent className='mcontent'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {children}
         </ModalBody>
         <ModalFooter>
-          {form && <Button colorScheme="blue" mr={3} onClick={onSave} isLoading={isSubmitting} type='submit' form={form}>
+          {form && <Button colorScheme="blue" mr={3} isLoading={isSubmitting} form={form} type="submit">
             Save
           </Button>}
           <Button variant="ghost" onClick={onClose}>Cancel</Button>

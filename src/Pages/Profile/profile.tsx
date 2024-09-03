@@ -8,6 +8,7 @@ import './profile.css';
 import Suppliers from './suppliers';
 import Materials from './materials';
 import Sales from './sales';
+import FormsPage from './FormsPage';
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ const Profile: React.FC = () => {
           <Tab>Purchases</Tab>
           <Tab>Sales</Tab>
           <Tab>Materials</Tab>
+          <Tab>Forms</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -43,7 +45,10 @@ const Profile: React.FC = () => {
             {activeTab === 3 && <Sales />}
           </TabPanel>
           <TabPanel>
-            {activeTab === 3 && <Materials />}
+            {activeTab === 4 && <Materials />}
+          </TabPanel>
+          <TabPanel>
+            {activeTab === 5 && <FormsPage />}
           </TabPanel>
         </TabPanels>
       </Tabs>

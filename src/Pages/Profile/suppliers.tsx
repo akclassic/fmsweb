@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { UserInfo } from "../../Services/Models/UserInfo";
 import useUserService from "../../Services/Concretes/UserService";
-import { Box, Button, Center, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import { DeleteIcon } from "@chakra-ui/icons";
 import useToastMessage from "../../Contexts/UseToastMessage";
 import SupplierDetails from "../../Components/SupplierDetails";
+import { LuFileSpreadsheet } from "react-icons/lu";
+import axios from "axios";
+import { getBaseAPIUrl } from "../../Utils/func";
+import { AgedTrialBalanceDto } from "../../Services/Models/AgedTrialBalanceInfo";
 
 const Suppliers: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -14,6 +18,7 @@ const Suppliers: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const showToast = useToastMessage();
     const [selectedSupplierId, setSelectedSupplierId] = useState<string>("");
+    const [trialBalance, setTrialBalance] = useState<AgedTrialBalanceDto | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -54,6 +59,22 @@ const Suppliers: React.FC = () => {
         onClose();
     }
 
+    const showTrialBalance = async (supplierId: string) => {
+        setLoading(true);
+        try {
+            const hostUrl: string = getBaseAPIUrl();
+            const baseUrl: string = hostUrl + "/Supplier";
+            const response = await axios.get(`${baseUrl}/trialbalance/${supplierId}`);
+            console.log(response);
+            setTrialBalance(response.data);
+            // setError(null);
+        } catch (err) {
+            console.log('Error fetching trial balance.');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <Box p={4}>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
@@ -72,6 +93,7 @@ const Suppliers: React.FC = () => {
                                 <Th>Name</Th>
                                 <Th>Credit/Debit Balance</Th>
                                 <Th>Action</Th>
+                                <Th>Trial Balance</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -86,10 +108,45 @@ const Suppliers: React.FC = () => {
                                     <Td>
                                         <DeleteIcon onClick={() => handleSupplierRemove(supplier.supplierId ? supplier.supplierId : "")} />
                                     </Td>
+                                    <Td>
+                                        <IconButton
+                                            icon={<LuFileSpreadsheet />}
+                                            onClick={() => showTrialBalance(supplier.supplierId ?? "")}
+                                            aria-label="Download Invoice"
+                                        />
+                                    </Td>
                                 </Tr>
                             ))}
                         </Tbody>
                     </Table>
+                    {trialBalance && trialBalance.Balance && (
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>Account</Th>
+                                    <Th>Name</Th>
+                                    <Th>Balance</Th>
+                                    <Th>Current</Th>
+                                    <Th>1 Month</Th>
+                                    <Th>2 Months</Th>
+                                    <Th>3 Months</Th>
+                                    <Th>Phone</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                <Tr>
+                                    <Td>{trialBalance.Account}</Td>
+                                    <Td>{trialBalance.Name}</Td>
+                                    <Td>{trialBalance.Balance}</Td>
+                                    <Td>{trialBalance.Current}</Td>
+                                    <Td>{trialBalance.OneMonth}</Td>
+                                    <Td>{trialBalance.TwoMonths}</Td>
+                                    <Td>{trialBalance.ThreeMonths}</Td>
+                                    <Td>{trialBalance.Phone}</Td>
+                                </Tr>
+                            </Tbody>
+                        </Table>
+                    )}
                 </TableContainer>
             )}
             <Modal

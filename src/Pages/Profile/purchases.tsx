@@ -115,7 +115,7 @@ const Purchases: React.FC = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <CommonModal
+            {/* <CommonModal
                 isOpen={isOpen}
                 onClose={onClose}
                 title="Purchase Details"
@@ -123,7 +123,7 @@ const Purchases: React.FC = () => {
                 isSubmitting={isSubmitting}
             >
                 <PurchaseForm onSubmit={handleSave}></PurchaseForm>
-            </CommonModal>
+            </CommonModal> */}
         </Box>
     )
 }

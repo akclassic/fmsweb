@@ -6,6 +6,12 @@ import moment from "moment";
 import { AttachmentIcon } from "@chakra-ui/icons";
 import { handleDownload } from "../../Utils/func";
 import CommonModal from "../../Components/Modal/Modal";
+import PaymentsReceivedForm, { PaymentsReceivedFormValues } from "../../Components/Forms/PaymentRecieved";
+import withForm from "../../HOC/withForm";
+import { PaymentMode } from "../../Utils/enums";
+import { FormikHelpers } from "formik";
+
+const EnhancedPaymentsReceivedForm = withForm<PaymentsReceivedFormValues>(PaymentsReceivedForm);
 
 const Sales: React.FC = () => {
     const { getSalesOrders } = useCompanyService();
@@ -28,10 +34,19 @@ const Sales: React.FC = () => {
         }
     }
 
+    const handleSave = async (values: any) => {
+        console.log(values)
+    }
+
+    const handleFormSubmit = async (values: PaymentsReceivedFormValues, formikHelpers: FormikHelpers<PaymentsReceivedFormValues>) => {
+        console.log('Form Values:', values);
+        // Perform further actions with form values
+    };
+
     const totalAmount = salesOrders.reduce((acc, purchase) => acc + purchase.totalAmount, 0);
     const totalOutstanding = salesOrders.reduce((acc, purchase) => acc + purchase.outstandingBalance, 0);
     const totalQuantity = salesOrders.reduce((acc, purchase) => acc + purchase.quantity, 0);
-    
+
     return (
         <Box>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
@@ -102,15 +117,23 @@ const Sales: React.FC = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
-            {/* <CommonModal
+            <CommonModal
                 isOpen={isOpen}
                 onClose={onClose}
-                title="Sales Details"
-                onSave={(data: any) => handleSave(data)}
+                title="Payment Received"
                 isSubmitting={isSubmitting}
+                form="paymentreceivedform"
             >
-                <PurchaseForm onSubmit={handleSave}></PurchaseForm>
-            </CommonModal> */}
+                <EnhancedPaymentsReceivedForm
+                    initialValues={{
+                        dateTime: '',
+                        partyName: '',
+                        paymentAmount: '',
+                        paymentMode: PaymentMode.Cash,
+                    }}
+                    onSubmit={handleFormSubmit}
+                />
+            </CommonModal>
         </Box>
     )
 }
