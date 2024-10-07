@@ -10,13 +10,16 @@ import PaymentsReceivedForm, { PaymentsReceivedFormValues } from "../../Componen
 import withForm from "../../HOC/withForm";
 import { PaymentMode } from "../../Utils/enums";
 import { FormikHelpers } from "formik";
+import SalesForm, { SalesFormValues } from "../../Components/Forms/Sales";
 
 const EnhancedPaymentsReceivedForm = withForm<PaymentsReceivedFormValues>(PaymentsReceivedForm);
+const EnhancedSalesForm = withForm<SalesFormValues>(SalesForm);
 
 const Sales: React.FC = () => {
     const { getSalesOrders } = useCompanyService();
     const [salesOrders, setSalesOrders] = useState<SalesOrderinfo[]>([]);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isPaymentReceivedFormOpen, onOpen: onPaymentReceivedFormOpen, onClose: onPaymentReceivedFormClose } = useDisclosure();
+    const { isOpen: isSalesFormOpen, onOpen: onSalesFormOpen, onClose: onSalesFormClose } = useDisclosure();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
@@ -50,7 +53,8 @@ const Sales: React.FC = () => {
     return (
         <Box>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
-                <Button colorScheme="blue" onClick={onOpen}>Create Sale Order</Button>
+                <Button colorScheme="blue" onClick={onSalesFormOpen} m={2}>Sales Form</Button>
+                <Button colorScheme="blue" onClick={onPaymentReceivedFormOpen}>Payment Received Form</Button>
             </Flex>
             <TableContainer>
                 <Table variant='striped' colorScheme='teal'>
@@ -118,8 +122,8 @@ const Sales: React.FC = () => {
                 </Table>
             </TableContainer>
             <CommonModal
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isPaymentReceivedFormOpen}
+                onClose={onPaymentReceivedFormClose}
                 title="Payment Received"
                 isSubmitting={isSubmitting}
                 form="paymentreceivedform"
@@ -132,6 +136,23 @@ const Sales: React.FC = () => {
                         paymentMode: PaymentMode.Cash,
                     }}
                     onSubmit={handleFormSubmit}
+                />
+            </CommonModal>
+            <CommonModal
+                isOpen={isSalesFormOpen}
+                onClose={onSalesFormClose}
+                title="Sales"
+                isSubmitting={isSubmitting}
+                form="salesform"
+            >
+                <EnhancedSalesForm
+                    initialValues={{
+                        dateTime: '',
+                        partyName: '',
+                        paymentAmount: '',
+                        paymentMode: PaymentMode.Cash,
+                    }}
+                    onSubmit={() => {}}
                 />
             </CommonModal>
         </Box>

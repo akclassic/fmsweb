@@ -1,10 +1,10 @@
 export interface AgedTrialBalanceDto {
-    Account: string;      // Could be a custom supplier code or ID
-    Name: string;
-    Balance: number;      // Corresponds to C# decimal
-    Current: number;      // Corresponds to C# decimal
-    OneMonth: number;     // Corresponds to C# decimal
-    TwoMonths: number;    // Corresponds to C# decimal
-    ThreeMonths: number;  // Corresponds to C# decimal
-    Phone: string;        // Assuming the Supplier has a phone field
+    id: string;      // Could be a custom supplier code or ID
+    name: string;
+    balance: number;      // Corresponds to C# decimal
+    current: number;      // Corresponds to C# decimal
+    oneMonth: number;     // Corresponds to C# decimal
+    twoMonths: number;    // Corresponds to C# decimal
+    threeMonths: number;  // Corresponds to C# decimal
+    phone: string;        // Assuming the Supplier has a phone field
 }

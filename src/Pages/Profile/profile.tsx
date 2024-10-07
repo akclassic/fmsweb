@@ -9,6 +9,7 @@ import Suppliers from './suppliers';
 import Materials from './materials';
 import Sales from './sales';
 import FormsPage from './FormsPage';
+import TrialBalance from './trialbalance';
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();

@@ -9,6 +9,8 @@ import { LuFileSpreadsheet } from "react-icons/lu";
 import axios from "axios";
 import { getBaseAPIUrl } from "../../Utils/func";
 import { AgedTrialBalanceDto } from "../../Services/Models/AgedTrialBalanceInfo";
+import CommonModal from "../../Components/Modal/Modal";
+import TrialBalance from "./trialbalance";
 
 const Suppliers: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -16,6 +18,7 @@ const Suppliers: React.FC = () => {
     const [isSaveSupplier, setIsSaveSupplier] = useState<boolean>(false);
     const { getAllSuppliers, removeSupplier } = useUserService();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isTrialBalanceModalOpen, onOpen: onTrialBalanceModalOpen, onClose: onTrialBalanceModalClose } = useDisclosure();
     const showToast = useToastMessage();
     const [selectedSupplierId, setSelectedSupplierId] = useState<string>("");
     const [trialBalance, setTrialBalance] = useState<AgedTrialBalanceDto | null>(null);
@@ -75,9 +78,14 @@ const Suppliers: React.FC = () => {
         }
     }
 
+    const handleTrialBalance = () => {
+        onTrialBalanceModalOpen();
+    }
+
     return (
         <Box p={4}>
             <Flex justifyContent="flex-end" alignItems="center" mb={4}>
+                <Button colorScheme="blue" onClick={handleTrialBalance} mr={4}>View Trial Balance</Button>
                 <Button colorScheme="blue" onClick={onOpen}>Add Supplier</Button>
             </Flex>
             {loading ? (
@@ -119,7 +127,7 @@ const Suppliers: React.FC = () => {
                             ))}
                         </Tbody>
                     </Table>
-                    {trialBalance && trialBalance.Balance && (
+                    {trialBalance && trialBalance.balance && (
                         <Table variant="simple">
                             <Thead>
                                 <Tr>
@@ -135,14 +143,14 @@ const Suppliers: React.FC = () => {
                             </Thead>
                             <Tbody>
                                 <Tr>
-                                    <Td>{trialBalance.Account}</Td>
-                                    <Td>{trialBalance.Name}</Td>
-                                    <Td>{trialBalance.Balance}</Td>
-                                    <Td>{trialBalance.Current}</Td>
-                                    <Td>{trialBalance.OneMonth}</Td>
-                                    <Td>{trialBalance.TwoMonths}</Td>
-                                    <Td>{trialBalance.ThreeMonths}</Td>
-                                    <Td>{trialBalance.Phone}</Td>
+                                    {/* <Td>{trialBalance.Account}</Td> */}
+                                    <Td>{trialBalance.name}</Td>
+                                    <Td>{trialBalance.balance}</Td>
+                                    <Td>{trialBalance.current}</Td>
+                                    <Td>{trialBalance.oneMonth}</Td>
+                                    <Td>{trialBalance.twoMonths}</Td>
+                                    <Td>{trialBalance.threeMonths}</Td>
+                                    <Td>{trialBalance.phone}</Td>
                                 </Tr>
                             </Tbody>
                         </Table>
@@ -169,6 +177,15 @@ const Suppliers: React.FC = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            {
+                isTrialBalanceModalOpen && <CommonModal
+                    isOpen={isTrialBalanceModalOpen}
+                    onClose={onTrialBalanceModalClose}
+                    title='Suppliers Trial Balance'
+                >
+                    <TrialBalance trialBalanceType={1} ></TrialBalance>
+                </CommonModal>
+            }
             {selectedSupplierId && <SupplierDetails isOpen={isOpen} onClose={onSupplierDetailClose} supplierId={selectedSupplierId} />}
         </Box>
     )

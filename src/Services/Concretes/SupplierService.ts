@@ -4,6 +4,7 @@ import { ISupplierService } from "../Contracts/ISupplierService";
 import { SupplierDetail } from "../Models/SupplierDetailInfo";
 import axios from "axios";
 import { SupplierPurchaseInfo } from "../Models/SupplierPurchaseInfo";
+import { AgedTrialBalanceDto } from "../Models/AgedTrialBalanceInfo";
 
 const useSupplierService = (): ISupplierService => {
     const hostUrl: string = getBaseAPIUrl();
@@ -29,7 +30,16 @@ const useSupplierService = (): ISupplierService => {
         }
     }, [baseUrl]);
 
-    return { getSupplierInfo, getSupplierTransactionsInfo };
+    const getSupplierTrailBalance = async (companyId: number): Promise<AgedTrialBalanceDto[]> => {
+        try {
+            const response = await axios.get(`${baseUrl}/trialbalance/${companyId}`);
+            return response.data;
+        } catch (error) {
+            throw new Error('Error fetching data');
+        }
+    }
+
+    return { getSupplierInfo, getSupplierTransactionsInfo, getSupplierTrailBalance };
 };
 
 export default useSupplierService;

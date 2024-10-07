@@ -12,29 +12,33 @@ import CommonModal from '../../Components/Modal/Modal';
 import useCustomerService from '../../Services/Concretes/CustomerService';
 import { CustomerPurchaseInfo } from '../../Services/Models/CustomerPurchaseInfo';
 import CustomerDetails from '../../Components/CustomerDetails';
+import TrialBalance from './trialbalance';
 
 const Customers: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [customers, setCustomers] = useState<UserInfo[]>([]);
   const [isSaveCustomer, setIsSaveCustomer] = useState<boolean>(false);
+  // const [viewTrialBalance, setViewTrialBalance] = useState<boolean>(false);
 
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
   const { getAllCustomers, saveCustomerDetail, removeCustomer } = useUserService();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isCustomerModalOpen, onOpen: onCustomerModalOpen, onClose: onCustomerModalClose } = useDisclosure();
+  const { isOpen: isCustomerDetailModalOpen, onOpen: onCustomerDetailModalOpen, onClose: onCustomerDetailModalClose } = useDisclosure();
+  const { isOpen: isTrialBalanceModalOpen, onOpen: onTrialBalanceModalOpen, onClose: onTrialBalanceModalClose } = useDisclosure();
   const showToast = useToastMessage();
 
   useEffect(() => {
-    setLoading(true);
     loadCustomers();
-    setLoading(false);
   }, []);
 
   const loadCustomers = async () => {
     try {
+      setLoading(true);
       const companyId = 1;
       const result = await getAllCustomers(companyId);
       setCustomers(result);
     } catch (error) {
+      setLoading(false);
       //setError(error.message);
     } finally {
       setLoading(false);
@@ -57,7 +61,7 @@ const Customers: React.FC = () => {
       await loadCustomers();
       setLoading(false);
     }
-    onClose();
+    onCustomerModalClose();
   };
 
   const handleCustomerRemove = async (customerId: string) => {
@@ -76,16 +80,19 @@ const Customers: React.FC = () => {
     }
     else {
       setSelectedCustomerId(customerId);
-      onOpen();
-      // const result = await getCustomerTransactionsInfo(customerId);
-      // setCustomerTransactions(result);
+      onCustomerDetailModalOpen();
     }
+  }
+
+  const handleTrialBalance = () => {
+      onTrialBalanceModalOpen();
   }
 
   return (
     <Box p={4}>
       <Flex justifyContent="flex-end" alignItems="center" mb={4}>
-        <Button colorScheme="blue" onClick={onOpen}>Add Customer</Button>
+        <Button colorScheme="blue" onClick={handleTrialBalance} mr={4}>View Trial Balance</Button>
+        <Button colorScheme="blue" onClick={onCustomerModalOpen}>Add Customer</Button>
       </Flex>
       {loading ? (
         <Center height="100vh">
@@ -135,16 +142,25 @@ const Customers: React.FC = () => {
           </Table>
         </TableContainer>
       )}
+      {
+        isTrialBalanceModalOpen && <CommonModal
+        isOpen={isTrialBalanceModalOpen}
+        onClose={onTrialBalanceModalClose}
+        title='Customers Trial Balance'
+        >
+          <TrialBalance trialBalanceType={0} ></TrialBalance>
+        </CommonModal>
+      }
       {selectedCustomerId && <CommonModal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isCustomerDetailModalOpen}
+        onClose={onCustomerDetailModalClose}
         title="Customer Details"
       >
         <CustomerDetails customerId={selectedCustomerId}/>
       </CommonModal>}
       {!selectedCustomerId && <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isCustomerModalOpen}
+        onClose={onCustomerModalClose}
 
       >
         <ModalOverlay />
@@ -158,7 +174,7 @@ const Customers: React.FC = () => {
             <Button colorScheme='blue' mr={3} isLoading={isSaveCustomer} form="add-edit-customer-form" type="submit">
               <Box as='span'>Save</Box>
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onCustomerModalClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>}

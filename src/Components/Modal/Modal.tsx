@@ -38,7 +38,7 @@ const CommonModal: React.FC<CommonModalProps> = ({
       <ModalContent className='mcontent'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody style={{overflow: 'auto'}}>
           {children}
         </ModalBody>
         <ModalFooter>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { ICustomerService } from "../Contracts/ICustomerService";
 import { CustomerPurchaseInfo } from "../Models/CustomerPurchaseInfo";
 import { getBaseAPIUrl } from "../../Utils/func";
+import { AgedTrialBalanceDto } from "../Models/AgedTrialBalanceInfo";
 
 const useCustomerService = (): ICustomerService => {
     const hostUrl: string = getBaseAPIUrl();
@@ -16,7 +17,16 @@ const useCustomerService = (): ICustomerService => {
         }
     }
 
-    return { getCustomerTransactionsInfo};
+    const getTrailBalance = async (companyId: number): Promise<AgedTrialBalanceDto[]> => {
+        try {
+            const response = await axios.get(`${baseUrl}/trialbalance/${companyId}`);
+            return response.data;
+        } catch (error) {
+            throw new Error('Error fetching data');
+        }
+    }
+
+    return { getCustomerTransactionsInfo, getTrailBalance};
 }
 
 export default useCustomerService;
